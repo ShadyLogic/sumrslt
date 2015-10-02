@@ -11,14 +11,19 @@ class BlogsController < ApplicationController
   # GET /blogs/1.json
   def show
     @photos = []
-    @blog = Blog.find_by(id: params[:id])
+    unless @blog = Blog.find_by(id: params[:id])
+      @blog = { url: params[:id] }
+    end
     posts = HTTParty.post("https://api.tumblr.com/v2/blog/#{@blog.url}/posts?api_key=z3lrerYuy075yp74piNFYOInINGoxNk1jTMWd8YlrJTUxqNfB7").parsed_response['response']['posts']
     posts.each do |post|
-      post['photos'].each do |photo|
-        @photos << photo['alt_sizes'][0]['url']
+      begin
+        post['photos'].each do |photo|
+          @photos << photo['alt_sizes'][0]['url']
+        end
+      rescue
+        puts "PHOTO ERROR"
       end
     end
-    p @photos[0]
   end
 
   # GET /blogs/new
@@ -67,6 +72,25 @@ class BlogsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to blogs_url, notice: 'Blog was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def quick_create
+    render 'quick.html'
+  end
+
+  def quick_post
+    redirect_to blogs
+  end
+
+  def quick_show
+    @photos = []
+    @blog = Blog.new(title: "QUICK BLOG", url: params[:url])
+    posts = HTTParty.post("https://api.tumblr.com/v2/blog/#{@blog.url}/posts?api_key=z3lrerYuy075yp74piNFYOInINGoxNk1jTMWd8YlrJTUxqNfB7").parsed_response['response']['posts']
+    posts.each do |post|
+      post['photos'].each do |photo|
+        @photos << photo['alt_sizes'][0]['url']
+      end
     end
   end
 

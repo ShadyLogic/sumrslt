@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+
+  get 'blogs/quick' => 'blogs#quick_create'
+
+  post 'blogs/quick' => 'blogs#quick_post'
+
+  get 'blogs/quick/:url' => 'blogs#quick_show'
+
   resources :blogs do
     resources :posts
   end
