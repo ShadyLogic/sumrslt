@@ -12,7 +12,7 @@ class BlogsController < ApplicationController
   def show
     @photos = []
     @blog = Blog.find_by(id: params[:id])
-    posts = HTTParty.post('https://api.tumblr.com/v2/blog/sistersiss.tumblr.com/posts?api_key=z3lrerYuy075yp74piNFYOInINGoxNk1jTMWd8YlrJTUxqNfB7').parsed_response['response']['posts']
+    posts = HTTParty.post("https://api.tumblr.com/v2/blog/#{@blog.url}/posts?api_key=z3lrerYuy075yp74piNFYOInINGoxNk1jTMWd8YlrJTUxqNfB7").parsed_response['response']['posts']
     posts.each do |post|
       post['photos'].each do |photo|
         @photos << photo['alt_sizes'][0]['url']
