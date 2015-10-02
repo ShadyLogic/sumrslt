@@ -1,18 +1,93 @@
-<p id="notice"><%= notice %></p>
+<!DOCTYPE html>
+<html lang="en">
 
-<p>
-  <strong>Title:</strong>
-  <%= @blog.title %>
-</p>
+<head>
+	<meta charset='UTF-8'>
 
-<p>
-  <strong>Url:</strong>
-  <%= @blog.url %>
-</p>
+	<title>Simple jQuery Slideshow</title>
 
-<% @photos.each do |photo| %>
-	<img src="<%= photo %>" alt="">
-<% end %>
+<!-- 	<link rel='stylesheet' href='css/style.css'> -->
 
-<%= link_to 'Edit', edit_blog_path(@blog) %> |
-<%= link_to 'Back', blogs_path %>
+	<style>
+/*		#slideshow {
+		    margin: 80px auto;
+		    position: relative;
+		    width: 240px;
+		    height: 240px;
+		    padding: 10px;
+		    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+		}*/
+
+		#slideshow > div {
+		    position: absolute;
+		    top: 10px;
+		    left: 10px;
+		    right: 10px;
+		    bottom: 10px;
+		}
+	</style>
+
+<!--	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> -->
+	<script>
+		$(function() {
+
+			$("#slideshow > div:gt(0)").hide();
+
+			var delaySlider = $("#delay");
+
+			setInterval(function() {
+			  $('#slideshow > div:first')
+			    .fadeOut(1000)
+			    .next()
+			    .fadeIn(1000)
+			    .end()
+			    .appendTo('#slideshow');
+
+			    console.log((delaySlider.val() * 1000))
+
+			},  (delaySlider.val() * 1000));
+
+		});
+
+		$(function() {
+		   $( "#slider" ).slider();
+		 });
+	</script>
+</head>
+
+<body>
+
+	<!-- SOURCE: https://css-tricks.com/examples/SimpleSlideshow/ -->
+	<div id="slideshow">
+		<% @photos.each do |photo| %>
+			<div>
+				<img src="<%= photo %>" alt="">
+				<div id="slider"></div>
+			</div>
+		<% end %>
+		<!-- SOURCE: http://www.w3schools.com/jquerymobile/jquerymobile_form_sliders.asp -->
+
+	</div>
+	<div id='delay-box'>
+		<p><input type="range" name="delay" id="delay" value="6" min="1" max="10" /></p>
+	</div>
+ <style type="text/css" style="display: none !important;">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	#delay-box {
+		position: fixed;
+		bottom: 0px;
+		width: 100%;
+		background: white;
+	}#delay {
+		width: 100%
+	}
+</style>
+</body>
+
+</html>
